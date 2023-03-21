@@ -23,3 +23,11 @@
 
 # Swagger documentation
     http://localhost:3001/api#/
+
+## Run Application
+    from root of project, execute:
+# yarn
+    to add all dependencies
+
+# yarn start 
+    to start the project
