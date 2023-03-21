@@ -8,10 +8,13 @@ import { UserSchema } from './entities/user.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { join } from 'path';
+import { HttpModule } from '@nestjs/axios';
+import { ImageUserSchema } from './entities/image-user.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
+    HttpModule,
+    MongooseModule.forFeature([{name: 'User', schema: UserSchema}, {name: 'ImagesUser', schema: ImageUserSchema}]),
     ClientsModule.registerAsync([
       {
         name: 'RMQ_USER_SERVICE',
