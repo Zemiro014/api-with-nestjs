@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,6 +13,7 @@ export class UsersService {
 constructor(
   @InjectModel('User') private userModel: Model<UserDocument>,
   @Inject('RMQ_USER_SERVICE') private clientProxy: ClientProxy,
+  private mailerService: MailerService,
   ){}
 
   create(createUserDto: CreateUserDto): Promise<User> {
@@ -20,7 +22,16 @@ constructor(
     response.then( async resp => {
 
       //  Send Email
-
+      await this.mailerService.sendMail({
+        to: process.env.TO_EMAIL,
+        from: process.env.FROM_EMAIL,
+        subject: 'Greeting from NestJS NodeMailer',
+        template: './email',
+        context: {
+            name: resp.first_name
+        }
+    })
+    
       //  Creatinf Event in Rabbitmq
       const result = await this.clientProxy.send({cmd: 'create-user-data'}, {
         firstName: resp.first_name,
