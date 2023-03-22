@@ -10,6 +10,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { HttpModule } from '@nestjs/axios';
 import { ImageUserSchema } from './entities/image-user.entity';
+import { UtilsService } from 'src/utils/utils.service';
+import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
@@ -41,8 +44,6 @@ import { ImageUserSchema } from './entities/image-user.entity';
               user: process.env.MAIL_USER,
               pass: process.env.MAIL_PASSWORD,
             },
-            // debug: true,
-            // logger: true
           },
 
         defaults: {
@@ -59,6 +60,11 @@ import { ImageUserSchema } from './entities/image-user.entity';
   })
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    UtilsService,
+    RabbitmqService,
+    MailService,
+  ],
 })
 export class UsersModule {}
